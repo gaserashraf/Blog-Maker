@@ -1,7 +1,7 @@
 <template>
     <div id="add-blog">
         <h2>Add a new blog post</h2>
-        <form>
+        <form v-if="!submitted">
             <input type="text" v-model="blog.title" required placeholder="Blog title">
             <textarea required v-model="blog.content" placeholder="Blog content"></textarea>
             <div id="blog-categories">
@@ -28,11 +28,14 @@
 
             </div>
             <div class="buttons">
-                <button class="preview" v-on:click="previewBlogFun($event)">Preview Blog</button>
-                <button v-on:click="submitBlogFun">Submit Blog</button>
-                <button class="clear" v-on:click="clear">Cancel</button>
+                <button class="preview" v-on:click.prevent="previewBlogFun()">Preview Blog</button>
+                <button v-on:click.prevent="submitBlogFun">Submit Blog</button>
+                <button class="clear" v-on:click.prevent="clear">Cancel</button>
             </div>
         </form>
+        <div v-if="submitted" class="success">
+            <h3>Blog submitted successfully!</h3>
+        </div>
         <div id="preview-section">
             <h3>Preview Blog</h3>
             <p>
@@ -49,6 +52,7 @@
 </template>
   
 <script>
+import axios from 'axios'
 
 export default {
     name: 'addBlog',
@@ -63,23 +67,36 @@ export default {
                 title: '',
                 content: '',
                 categories: []
-            }
+            },
+            submitted: false
 
         }
     }, methods: {
-        previewBlogFun(event) {
-            event.preventDefault();
+        previewBlogFun() {
             this.previewBlog.title = this.blog.title;
             this.previewBlog.content = this.blog.content;
             this.previewBlog.categories = this.blog.categories;
         },
         submitBlogFun() {
-            console.log(this.blog);
+            
+            axios.post("https://jsonplaceholder.typicode.com/posts", {
+                title: this.blog.title,
+                body: this.blog.content,
+                userId: "Axios!"
+                })
+                .then(data => {
+                console.log(data);
+                this.submitted = true;
+                this.previewBlogFun();
+            });
+            //console.log(this.blog);
         }, clear() {
             this.blog.title = '';
             this.blog.content = '';
+            this.blog.categories = [];
             this.previewBlog.title = '';
             this.previewBlog.content = '';
+            this.previewBlog.categories = [];
         }
     }
 
@@ -87,10 +104,6 @@ export default {
 </script>
   
 <style scoped>
-* {
-    box-sizing: border-box;
-    color: #444;
-}
 
 #add-blog {
     margin: 20px auto;
@@ -146,6 +159,16 @@ button.clear {
     background-color: #f50404;
 }
 
+.success{
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px;
+    border-radius: 3px;
+}
+.success h3{
+    margin: 0;
+    color: #fff;
+}
 #preview-section {
     padding: 10px 20px;
     border: 1px dotted #ccc;
