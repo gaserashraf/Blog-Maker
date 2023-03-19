@@ -1,19 +1,23 @@
 <template>
     <div id="blog-item">
-        <h2 v-rand-color>{{ blog.title }}</h2>
-        <p>{{ blog.body }}</p>
+        <h2 v-rand-color>{{ blog.title | to - uppercase }}</h2>
+        <p>{{ blog.body | snippet }}</p>
     </div>
 </template>
   
 <script>
 export default {
     name: 'viewBlogs',
-    props:{
+    props: {
         blog: {
             type: Object,
             required: true
-        }   
-    }
+        }
+    }, filters: {
+        toUppercase(value) {
+            return value.toUpperCase();
+        }
+    },
 
 }
 </script>
