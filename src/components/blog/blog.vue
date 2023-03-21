@@ -3,15 +3,18 @@
         <div id="blog-item">
             <h2 v-rand-color>{{ blog.title | to - uppercase }}</h2>
             <p>{{ blog.content | snippet }}</p>
-
-
+            <BlogCategories v-bind:categories="blog.categories" />
         </div>
     </router-link>
 </template>
   
 <script>
+import blogCategoriesVue from './blogCategories.vue';
 export default {
     name: 'viewBlogs',
+    components: {
+        BlogCategories: blogCategoriesVue
+    },
     props: {
         blog: {
             type: Object,

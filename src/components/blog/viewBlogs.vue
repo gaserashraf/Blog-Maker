@@ -1,11 +1,14 @@
 <template>
-    <div id="blogs">
+    <div class="container">
         <h2>All Blogs</h2>
         <div id="search-filter">
             <input type="text" v-model="search" placeholder="Search blogs">
         </div>
         <Loader v-if="isLoading" />
         <Blog v-for="blog in filteredBlogs" v-bind:key="blog.id" v-bind:blog="blog" />
+        <div v-if="!isLoading && filteredBlogs.length == 0">
+            <h3>No blogs found!</h3>
+        </div>
     </div>
 </template>
   
@@ -13,6 +16,8 @@
 import axios from 'axios'
 import blog from './blog.vue';
 import loader from '../partials/loader.vue';
+import apiBaseUrl from "../../config.json";
+
 export default {
     name: 'viewBlogs',
     components: {
@@ -35,7 +40,7 @@ export default {
     },
     created() {
         this.isLoading = true;
-        axios.get("https://blog-maker-d7bba-default-rtdb.firebaseio.com/posts.json")
+        axios.get(`${apiBaseUrl.apiBaseUrl}/posts.json`)
             .then(data => {
                 //console.log(data.data);
                 const blogsArr = [];
@@ -52,11 +57,6 @@ export default {
 </script>
   
 <style scoped>
-#blogs {
-    max-width: 800px;
-    margin: 0px auto;
-}
-
 #search-filter {
     margin: 20px 0;
 }

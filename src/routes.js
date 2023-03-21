@@ -13,6 +13,10 @@ export default [
     component: addBlog,
   },
   {
+    path: "/add/:id",
+    component: addBlog,
+  },
+  {
     path: "/blog/:id",
     component: singleBlog,
   },
