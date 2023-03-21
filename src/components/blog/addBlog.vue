@@ -78,17 +78,12 @@ export default {
             this.previewBlog.categories = this.blog.categories;
         },
         submitBlogFun() {
-            
-            axios.post("https://jsonplaceholder.typicode.com/posts", {
-                title: this.blog.title,
-                body: this.blog.content,
-                userId: "Axios!"
-                })
+            axios.post("https://blog-maker-d7bba-default-rtdb.firebaseio.com/posts.json", this.blog)
                 .then(data => {
-                console.log(data);
-                this.submitted = true;
-                this.previewBlogFun();
-            });
+                    console.log(data);
+                    this.submitted = true;
+                    this.previewBlogFun();
+                });
             //console.log(this.blog);
         }, clear() {
             this.blog.title = '';
@@ -104,7 +99,6 @@ export default {
 </script>
   
 <style scoped>
-
 #add-blog {
     margin: 20px auto;
     max-width: 500px;
@@ -159,16 +153,18 @@ button.clear {
     background-color: #f50404;
 }
 
-.success{
+.success {
     background-color: #4CAF50;
     color: #fff;
     padding: 10px;
     border-radius: 3px;
 }
-.success h3{
+
+.success h3 {
     margin: 0;
     color: #fff;
 }
+
 #preview-section {
     padding: 10px 20px;
     border: 1px dotted #ccc;

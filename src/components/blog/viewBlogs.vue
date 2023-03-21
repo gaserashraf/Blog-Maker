@@ -4,22 +4,26 @@
         <div id="search-filter">
             <input type="text" v-model="search" placeholder="Search blogs">
         </div>
-        <Blog v-for="blog in filteredBlogs" v-bind:key="blog.id" v-bind:blog="blog"/>
+        <Loader v-if="isLoading" />
+        <Blog v-for="blog in filteredBlogs" v-bind:key="blog.id" v-bind:blog="blog" />
     </div>
 </template>
   
 <script>
 import axios from 'axios'
 import blog from './blog.vue';
+import loader from '../partials/loader.vue';
 export default {
     name: 'viewBlogs',
     components: {
-        Blog:blog
+        Blog: blog,
+        Loader: loader
     },
     data() {
         return {
             blogs: [],
-            search: ''
+            search: '',
+            isLoading: true
         }
     },
     computed: {
@@ -30,10 +34,17 @@ export default {
         }
     },
     created() {
-        axios.get("https://jsonplaceholder.typicode.com/posts")
+        this.isLoading = true;
+        axios.get("https://blog-maker-d7bba-default-rtdb.firebaseio.com/posts.json")
             .then(data => {
-                this.blogs = data.data.slice(0, 10);
-                console.log(data);
+                //console.log(data.data);
+                const blogsArr = [];
+                for (let key in data.data) {
+                    blogsArr.push({ ...data.data[key], id: key });
+                }
+                console.log(blogsArr);
+                this.blogs = blogsArr;
+                this.isLoading = false;
             });
     }
 
@@ -41,14 +52,16 @@ export default {
 </script>
   
 <style scoped>
-#blogs{
+#blogs {
     max-width: 800px;
     margin: 0px auto;
 }
-#search-filter{
+
+#search-filter {
     margin: 20px 0;
 }
-#search-filter input{
+
+#search-filter input {
     width: 100%;
     padding: 10px;
     box-sizing: border-box;

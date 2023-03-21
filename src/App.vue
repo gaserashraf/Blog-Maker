@@ -1,23 +1,16 @@
 <template>
   <div id="app">
-   
     <navbarApp/>
     <router-view></router-view>
-    <!-- <addBlog v-if="false"/>
-    <viewBlogs/> -->
   </div>
 </template>
 
 <script>
-// import addBlog from './components/addBlog.vue';
-// import viewBlogs from './components/viewBlogs.vue';
-import navbarApp from './components/navbar.vue';
+import navbarApp from './components/navbar/navbar.vue';
 
 export default {
   name: 'App',
   components: {
-    // addBlog,
-    // viewBlogs,
     navbarApp
     
 }

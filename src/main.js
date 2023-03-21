@@ -14,6 +14,8 @@ Vue.directive('rand-color', {
 })
 
 Vue.filter('snippet', value => {
+  if(value.length <= 100)
+    return value
   return value.slice(0, 100) + '...'
 })
 
